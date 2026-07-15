@@ -6,15 +6,35 @@ const email = TASKS.find(t => t.name === 'email');
 const N = Number(process.env.CE_N) || 40;
 const MODELS = (process.env.CE_MODELS || 'claude-haiku-4-5-20251001,claude-sonnet-4-6,claude-opus-4-8').split(',');
 
-const kv = Object.fromEntries(fs.readFileSync(path.join(__dirname, '..', '.env'), 'utf8')
-  .split(/\r?\n/).filter(l => l.includes('=') && !l.trim().startsWith('#'))
-  .map(l => { const i = l.indexOf('='); return [l.slice(0, i).trim(), l.slice(i + 1).trim()]; }));
-const KEY = kv.ANTHROPIC_API_KEY;
+// The environment wins and .env is only a fallback: a managed runner injects the
+// key from the secrets manager, and requiring a plaintext .env on disk would mean
+// a long-lived credential sitting on every laptop that runs the benchmark.
+function readEnvFile() {
+  try {
+    return Object.fromEntries(fs.readFileSync(path.join(__dirname, '..', '.env'), 'utf8')
+      .split(/\r?\n/).filter(l => l.includes('=') && !l.trim().startsWith('#'))
+      .map(l => { const i = l.indexOf('='); return [l.slice(0, i).trim(), l.slice(i + 1).trim()]; }));
+  } catch (e) {
+    return {}; // no .env — expected when the key comes from the environment
+  }
+}
+
+const kv = readEnvFile();
+const KEY = process.env.ANTHROPIC_API_KEY || kv.ANTHROPIC_API_KEY;
+// Point at an approved gateway (Bedrock/Vertex proxy, internal egress) without
+// editing code. Same var name the Anthropic SDKs use.
+const BASE_URL = (process.env.ANTHROPIC_BASE_URL || kv.ANTHROPIC_BASE_URL || 'https://api.anthropic.com')
+  .replace(/\/+$/, '');
+
+if (!KEY) {
+  console.error('No ANTHROPIC_API_KEY in the environment or .env. Export it from your secrets manager, or see benchmarks/README.md.');
+  process.exit(1);
+}
 
 async function call(model, system, user) {
   const body = { model, max_tokens: 1024, messages: [{ role: 'user', content: user }] };
   if (system) body.system = system;
-  const r = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST',
+  const r = await fetch(`${BASE_URL}/v1/messages`, { method: 'POST',
     headers: { 'x-api-key': KEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' }, body: JSON.stringify(body) });
   if (!r.ok) return { err: r.status };
   const j = await r.json();

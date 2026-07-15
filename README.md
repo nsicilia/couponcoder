@@ -229,6 +229,8 @@ node scripts/check-rule-copies.js
 npm test
 ```
 
+This is an internal fork and does not publish. The npm publish path is removed and `package.json` is marked private; `npm test` fails if either is reintroduced. Distribute through the internal registry instead.
+
 The correctness benchmark spawns Python for email and CSV checks; `python3` is tried before `python`. CSV checks need `pandas` installed locally.
 
 ## License

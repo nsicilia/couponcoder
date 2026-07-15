@@ -1,6 +1,7 @@
 {
   "name": "@nicksicilianosalazar/couponcoder",
   "version": "4.8.4",
+  "private": true,
   "description": "Lazy senior dev mode for AI agents. The best code is the code you never wrote.",
   "keywords": ["opencode-plugin", "opencode", "couponcoder", "pi-package", "pi", "skills"],
   "license": "MIT",
@@ -37,9 +38,6 @@
   "pi": {
     "extensions": ["./pi-extension/index.js"],
     "skills": ["./skills"]
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }
 
