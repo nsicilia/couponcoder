@@ -3,11 +3,11 @@
   "version": "4.8.4",
   "description": "Lazy senior dev mode. Forces the simplest, shortest solution that actually works: YAGNI, stdlib first, no unrequested abstractions.",
   "author": {
-    "name": "Dietrich Gebert",
-    "url": "https://github.com/NickSicilianoSalazar"
+    "name": "Nicholas Siciliano",
+    "url": "https://github.com/nsicilia"
   },
-  "homepage": "https://github.com/NickSicilianoSalazar/couponcoder",
-  "repository": "https://github.com/NickSicilianoSalazar/couponcoder",
+  "homepage": "https://github.com/nsicilia/couponcoder",
+  "repository": "https://github.com/nsicilia/couponcoder",
   "license": "MIT",
   "keywords": ["yagni", "minimalism", "code-review", "productivity"],
   "skills": "./skills/",
