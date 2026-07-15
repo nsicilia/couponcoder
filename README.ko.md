@@ -12,16 +12,16 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/github/stars/NickSicilianoSalazar/couponcoder?style=flat-square&color=111111&label=stars" alt="Stars">
-  <img src="https://img.shields.io/github/v/release/NickSicilianoSalazar/couponcoder?style=flat-square&color=111111&label=release" alt="Release">
+  <img src="https://img.shields.io/github/stars/nsicilia/couponcoder?style=flat-square&color=111111&label=stars" alt="Stars">
+  <img src="https://img.shields.io/github/v/release/nsicilia/couponcoder?style=flat-square&color=111111&label=release" alt="Release">
   <img src="https://img.shields.io/npm/v/@nicksicilianosalazar/couponcoder?style=flat-square&color=111111&label=npm" alt="npm">
   <img src="https://img.shields.io/badge/works%20with-15%20agents-111111?style=flat-square" alt="Works with 15 agents">
   <img src="https://img.shields.io/badge/license-MIT-111111?style=flat-square" alt="MIT license">
 </p>
 
 <p align="center">
-  <a href="https://trendshift.io/repositories/50668" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/50668/daily" alt="NickSicilianoSalazar/couponcoder | Trendshift" width="250" height="55"/></a>
-  <a href="https://trendshift.io/repositories/50668" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/50668/weekly" alt="NickSicilianoSalazar/couponcoder | Trendshift" width="250" height="55"/></a>
+  <a href="https://trendshift.io/repositories/50668" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/50668/daily" alt="nsicilia/couponcoder | Trendshift" width="250" height="55"/></a>
+  <a href="https://trendshift.io/repositories/50668" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/50668/weekly" alt="nsicilia/couponcoder | Trendshift" width="250" height="55"/></a>
 </p>
 
 <p align="center">
@@ -81,7 +81,7 @@ couponcoder이라면:
   <img src="assets/benchmark-3model.svg" width="860" alt="Median lines of code per arm across Haiku, Sonnet and Opus">
 </p>
 
-여기선 **코드 80-94% 감소**가 나왔다. 다만 [#126](https://github.com/NickSicilianoSalazar/couponcoder/issues/126)이 맞게 짚었듯, 스킬을 전혀 안 붙인 기준선 모델은 답변을 설명과 선택지로 부풀린다. 그래서 그 격차의 일부는 대화형 기준선이 만들어 낸 착시다. 위의 에이전트 수치가 그걸 바로잡은, 근거 있는 버전이다. 단발성 실행은 `npx promptfoo eval -c benchmarks/promptfooconfig.yaml`로 재현할 수 있다.
+여기선 **코드 80-94% 감소**가 나왔다. 다만 [#126](https://github.com/nsicilia/couponcoder/issues/126)이 맞게 짚었듯, 스킬을 전혀 안 붙인 기준선 모델은 답변을 설명과 선택지로 부풀린다. 그래서 그 격차의 일부는 대화형 기준선이 만들어 낸 착시다. 위의 에이전트 수치가 그걸 바로잡은, 근거 있는 버전이다. 단발성 실행은 `npx promptfoo eval -c benchmarks/promptfooconfig.yaml`로 재현할 수 있다.
 
 </details>
 
@@ -114,7 +114,7 @@ Claude Code와 Codex 플러그인은 자그마한 Node.js 라이프사이클 훅
 ### Claude Code
 
 ```
-/plugin marketplace add NickSicilianoSalazar/couponcoder
+/plugin marketplace add nsicilia/couponcoder
 ```
 ```
 /plugin install couponcoder@couponcoder
@@ -126,7 +126,7 @@ Claude Code와 Codex 플러그인은 자그마한 Node.js 라이프사이클 훅
 ### Codex
 
 ```bash
-codex plugin marketplace add NickSicilianoSalazar/couponcoder
+codex plugin marketplace add nsicilia/couponcoder
 codex
 ```
 
@@ -138,14 +138,14 @@ codex
 ### GitHub Copilot CLI
 
 ```bash
-copilot plugin marketplace add NickSicilianoSalazar/couponcoder
+copilot plugin marketplace add nsicilia/couponcoder
 copilot plugin install couponcoder@couponcoder
 ```
 
 대화형 Copilot CLI 세션에서는 슬래시 명령으로 똑같이 하면 된다:
 
 ```
-/plugin marketplace add NickSicilianoSalazar/couponcoder
+/plugin marketplace add nsicilia/couponcoder
 /plugin install couponcoder@couponcoder
 ```
 
@@ -159,7 +159,7 @@ Copilot CLI는 플러그인 명령에 그 이름을 네임스페이스로 붙인
 ### Pi agent harness
 
 ```
-pi install git:github.com/NickSicilianoSalazar/couponcoder
+pi install git:github.com/nsicilia/couponcoder
 ```
 
 ### OpenCode
@@ -183,7 +183,7 @@ pi install git:github.com/NickSicilianoSalazar/couponcoder
 ### Gemini CLI
 
 ```bash
-gemini extensions install https://github.com/NickSicilianoSalazar/couponcoder
+gemini extensions install https://github.com/nsicilia/couponcoder
 ```
 
 매 세션 룰셋을 늘 켜진 컨텍스트로 불러오고 `/couponcoder` 명령들을 등록한다. `skills/`도 함께 실리며, 작업에 필요할 때 켜진다.
@@ -194,7 +194,7 @@ Gemini 어댑터는 일부러 루트 `hooks/hooks.json`을 두지 않는다. Gem
 Google이 Gemini CLI를 Antigravity CLI(`agy` 바이너리)로 이름을 바꾸는 중인데, 같은 확장이 거기에도 설치된다:
 
 ```bash
-agy plugin install https://github.com/NickSicilianoSalazar/couponcoder
+agy plugin install https://github.com/nsicilia/couponcoder
 ```
 
 이 저장소의 `gemini-extension.json`을 그대로 재사용한다. 차이는 하나다. Antigravity는 `/couponcoder` 명령들을 스킬로 바꿔 버려서, 슬래시 메뉴에서 고르는 대신 채팅에 직접 친다(예: `/couponcoder-review`를 메시지로). 전환이 마무리될 때까지(2026년 6월 18일경)는 `gemini extensions install`도 여전히 먹힌다. 늘 켜진 규칙으로 돌리고 싶으면, 룰셋을 `.agents/rules/`에 넣으면 된다.
@@ -208,7 +208,7 @@ agy plugin install https://github.com/NickSicilianoSalazar/couponcoder
 먼저 컬렉션을 라이브러리에 스테이징한 다음, 원하는 스킬을 더한다:
 
 ```bash
-swival skills add --global https://github.com/NickSicilianoSalazar/couponcoder  # ~/.config/swival/library에 스테이징
+swival skills add --global https://github.com/nsicilia/couponcoder  # ~/.config/swival/library에 스테이징
 swival skills add couponcoder                                             # 이 프로젝트에 컬렉션 설치
 swival skills add --global couponcoder                                    # 또는 모든 프로젝트에서 켜기
 ```
@@ -220,7 +220,7 @@ Swival도 프로젝트 루트의 `AGENTS.md`와 전역의 `~/.config/swival/AGEN
 ### Devin CLI
 
 ```bash
-devin plugins install NickSicilianoSalazar/couponcoder
+devin plugins install nsicilia/couponcoder
 ```
 
 couponcoder을 Devin 플러그인으로 설치한다. 스킬은 `/couponcoder:couponcoder`, `/couponcoder:couponcoder-review` 등으로 쓸 수 있다.
@@ -308,8 +308,8 @@ OpenClaw 스킬 패키지(`.openclaw/skills/`)는 `skills/`에서 생성된다. 
 
 <a href="https://www.star-history.com/nicksicilianosalazar/couponcoder#history">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=NickSicilianoSalazar/couponcoder&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=NickSicilianoSalazar/couponcoder&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=NickSicilianoSalazar/couponcoder&type=Date" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=nsicilia/couponcoder&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=nsicilia/couponcoder&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=nsicilia/couponcoder&type=Date" />
  </picture>
 </a>

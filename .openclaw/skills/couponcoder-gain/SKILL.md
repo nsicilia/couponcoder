@@ -1,7 +1,7 @@
 ---
 name: couponcoder-gain
 description: "Show couponcoder measured impact as a scoreboard: less code, less cost, more speed, from the benchmark medians. One-shot display."
-homepage: https://github.com/NickSicilianoSalazar/couponcoder
+homepage: https://github.com/nsicilia/couponcoder
 license: MIT
 ---
 

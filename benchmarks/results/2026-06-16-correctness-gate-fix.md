@@ -1,6 +1,6 @@
 # Correctness under Couponcoder: gate fixes + GPT-mini reproduction (2026-06-16)
 
-Context: [issue #65](https://github.com/NickSicilianoSalazar/couponcoder/issues/65) asked whether
+Context: [issue #65](https://github.com/nsicilia/couponcoder/issues/65) asked whether
 Couponcoder degrades model performance. A community run (Pyseph) reported a large correctness
 drop on `gpt-4.1-mini` (10/15 with Couponcoder vs 15/15 without) and a small one on
 `gpt-5.4-mini` (14/15 vs 15/15).

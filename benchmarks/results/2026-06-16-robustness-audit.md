@@ -1,6 +1,6 @@
 # Robustness audit: does couponcoder degrade weak models? (2026-06-16)
 
-Follow-up to [issue #65](https://github.com/NickSicilianoSalazar/couponcoder/issues/65). After fixing
+Follow-up to [issue #65](https://github.com/nsicilia/couponcoder/issues/65). After fixing
 the correctness-gate bugs, the open question was the real one: does Couponcoder's push toward
 the shortest solution make weak models produce *wrong* code on edge cases? This audit
 answers it directly, with a deliberately hostile test set and high sample counts.

@@ -1,7 +1,7 @@
 ---
 name: couponcoder-debt
 description: "Harvest every couponcoder: shortcut comment into one debt ledger, so deferrals get tracked instead of forgotten. One-shot report."
-homepage: https://github.com/NickSicilianoSalazar/couponcoder
+homepage: https://github.com/nsicilia/couponcoder
 license: MIT
 ---
 

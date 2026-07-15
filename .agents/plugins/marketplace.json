@@ -8,7 +8,7 @@
       "name": "couponcoder",
       "source": {
         "source": "url",
-        "url": "https://github.com/NickSicilianoSalazar/couponcoder.git",
+        "url": "https://github.com/nsicilia/couponcoder.git",
         "ref": "main"
       },
       "policy": {

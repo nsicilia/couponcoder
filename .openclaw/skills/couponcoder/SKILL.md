@@ -1,7 +1,7 @@
 ---
 name: couponcoder
 description: "Lazy senior dev mode for any coding task (write, refactor, fix, review): YAGNI, stdlib first, no unrequested abstractions. Not for non-coding requests."
-homepage: https://github.com/NickSicilianoSalazar/couponcoder
+homepage: https://github.com/nsicilia/couponcoder
 license: MIT
 ---
 

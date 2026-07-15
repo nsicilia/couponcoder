@@ -12,16 +12,16 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/github/stars/NickSicilianoSalazar/couponcoder?style=flat-square&color=111111&label=stars" alt="Stars">
-  <img src="https://img.shields.io/github/v/release/NickSicilianoSalazar/couponcoder?style=flat-square&color=111111&label=release" alt="Release">
+  <img src="https://img.shields.io/github/stars/nsicilia/couponcoder?style=flat-square&color=111111&label=stars" alt="Stars">
+  <img src="https://img.shields.io/github/v/release/nsicilia/couponcoder?style=flat-square&color=111111&label=release" alt="Release">
   <img src="https://img.shields.io/npm/v/@nicksicilianosalazar/couponcoder?style=flat-square&color=111111&label=npm" alt="npm">
   <img src="https://img.shields.io/badge/funciona%20con-15%20agentes-111111?style=flat-square" alt="Works with 15 agents">
   <img src="https://img.shields.io/badge/licencia-MIT-111111?style=flat-square" alt="MIT license">
 </p>
 
 <p align="center">
-  <a href="https://trendshift.io/repositories/50668" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/50668/daily" alt="NickSicilianoSalazar/couponcoder | Trendshift" width="250" height="55"/></a>
-  <a href="https://trendshift.io/repositories/50668" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/50668/weekly" alt="NickSicilianoSalazar/couponcoder | Trendshift" width="250" height="55"/></a>
+  <a href="https://trendshift.io/repositories/50668" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/50668/daily" alt="nsicilia/couponcoder | Trendshift" width="250" height="55"/></a>
+  <a href="https://trendshift.io/repositories/50668" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/50668/weekly" alt="nsicilia/couponcoder | Trendshift" width="250" height="55"/></a>
 </p>
 
 <p align="center">
@@ -81,7 +81,7 @@ Cinco tareas del día a día, tres modelos, tres variantes (sin skill, [caveman]
   <img src="assets/benchmark-3model.svg" width="860" alt="Mediana de líneas de código por variante en Haiku, Sonnet y Opus">
 </p>
 
-Esto mostraba **80-94% menos código**. [#126](https://github.com/NickSicilianoSalazar/couponcoder/issues/126) señaló con razón que el baseline del modelo pelado infla su respuesta con prosa y opciones, así que esa diferencia es en parte un artefacto del baseline conversacional. Los números agénticos de arriba son la versión corregida y defendible. Reproduce la corrida de un solo disparo con `npx promptfoo eval -c benchmarks/promptfooconfig.yaml`.
+Esto mostraba **80-94% menos código**. [#126](https://github.com/nsicilia/couponcoder/issues/126) señaló con razón que el baseline del modelo pelado infla su respuesta con prosa y opciones, así que esa diferencia es en parte un artefacto del baseline conversacional. Los números agénticos de arriba son la versión corregida y defendible. Reproduce la corrida de un solo disparo con `npx promptfoo eval -c benchmarks/promptfooconfig.yaml`.
 
 </details>
 
@@ -114,7 +114,7 @@ Los plugins de Claude Code y Codex ejecutan dos pequeños lifecycle hooks de Nod
 ### Claude Code
 
 ```
-/plugin marketplace add NickSicilianoSalazar/couponcoder
+/plugin marketplace add nsicilia/couponcoder
 /plugin install couponcoder@couponcoder
 ```
 
@@ -123,7 +123,7 @@ La app de escritorio no tiene el comando `/plugin`. Instálala desde la interfaz
 ### Codex
 
 ```bash
-codex plugin marketplace add NickSicilianoSalazar/couponcoder
+codex plugin marketplace add nsicilia/couponcoder
 codex
 ```
 
@@ -134,14 +134,14 @@ Esta misma instalación cubre también la app de escritorio de Codex: reinicia l
 ### GitHub Copilot CLI
 
 ```bash
-copilot plugin marketplace add NickSicilianoSalazar/couponcoder
+copilot plugin marketplace add nsicilia/couponcoder
 copilot plugin install couponcoder@couponcoder
 ```
 
 En una sesión interactiva de Copilot CLI, usa los equivalentes con slash:
 
 ```
-/plugin marketplace add NickSicilianoSalazar/couponcoder
+/plugin marketplace add nsicilia/couponcoder
 /plugin install couponcoder@couponcoder
 ```
 
@@ -155,7 +155,7 @@ Copilot CLI agrupa los comandos del plugin bajo el nombre del plugin. Por ejempl
 ### Pi agent harness
 
 ```
-pi install git:github.com/NickSicilianoSalazar/couponcoder
+pi install git:github.com/nsicilia/couponcoder
 ```
 
 ### OpenCode
@@ -179,7 +179,7 @@ El path `./` se resuelve contra el `opencode.json` de tu proyecto; para comparti
 ### Gemini CLI
 
 ```bash
-gemini extensions install https://github.com/NickSicilianoSalazar/couponcoder
+gemini extensions install https://github.com/nsicilia/couponcoder
 ```
 
 Carga el ruleset como contexto permanente en cada sesión y registra los comandos `/couponcoder`; los `skills/` también se incluyen, activados cuando una tarea los necesita.
@@ -189,7 +189,7 @@ Carga el ruleset como contexto permanente en cada sesión y registra los comando
 Google está renombrando Gemini CLI a Antigravity CLI (el binario `agy`); la misma extensión se instala ahí:
 
 ```bash
-agy plugin install https://github.com/NickSicilianoSalazar/couponcoder
+agy plugin install https://github.com/nsicilia/couponcoder
 ```
 
 Reutiliza el `gemini-extension.json` de este repo. Una diferencia: Antigravity convierte los comandos `/couponcoder` en skills, así que los escribes en el chat (por ejemplo `/couponcoder-review` como mensaje) en vez de seleccionarlos de un menú slash. Hasta que la migración se complete (alrededor del 18 de junio de 2026), `gemini extensions install` también funciona. Para usarlo como regla permanente, coloca el ruleset en `.agents/rules/`.
@@ -201,7 +201,7 @@ Lee `AGENTS.md` desde la raíz del proyecto, sin configuración. Copia [`AGENTS.
 ### Devin CLI
 
 ```bash
-devin plugins install NickSicilianoSalazar/couponcoder
+devin plugins install nsicilia/couponcoder
 ```
 
 Instala couponcoder como plugin de Devin; los skills quedan disponibles como `/couponcoder:couponcoder`, `/couponcoder:couponcoder-review`, etc.
@@ -288,8 +288,8 @@ Ya sabes exactamente por qué.
 
 <a href="https://www.star-history.com/nicksicilianosalazar/couponcoder#history">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=NickSicilianoSalazar/couponcoder&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=NickSicilianoSalazar/couponcoder&type=Date" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=NickSicilianoSalazar/couponcoder&type=Date" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=nsicilia/couponcoder&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=nsicilia/couponcoder&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=nsicilia/couponcoder&type=Date" />
  </picture>
 </a>

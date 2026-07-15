@@ -1,7 +1,7 @@
 ---
 name: couponcoder-help
 description: "Quick reference for couponcoder's modes, skills, and commands. One-shot display."
-homepage: https://github.com/NickSicilianoSalazar/couponcoder
+homepage: https://github.com/nsicilia/couponcoder
 license: MIT
 ---
 
@@ -67,4 +67,4 @@ If `/plugin` is not recognized, your Claude Code is out of date. Update it (`npm
 
 ## More
 
-Full docs + examples: https://github.com/NickSicilianoSalazar/couponcoder
+Full docs + examples: https://github.com/nsicilia/couponcoder

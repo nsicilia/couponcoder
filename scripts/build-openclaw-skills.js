@@ -14,7 +14,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
-const HOMEPAGE = 'https://github.com/NickSicilianoSalazar/couponcoder';
+const HOMEPAGE = 'https://github.com/nsicilia/couponcoder';
 
 const DESCRIPTIONS = {
   'couponcoder': 'Lazy senior dev mode for any coding task (write, refactor, fix, review): YAGNI, stdlib first, no unrequested abstractions. Not for non-coding requests.',

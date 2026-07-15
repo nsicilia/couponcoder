@@ -1,7 +1,7 @@
 ---
 name: couponcoder-audit
 description: "Audit the whole repo for over-engineering. A ranked list of what to delete, simplify, or replace with stdlib or native features."
-homepage: https://github.com/NickSicilianoSalazar/couponcoder
+homepage: https://github.com/nsicilia/couponcoder
 license: MIT
 ---
 
