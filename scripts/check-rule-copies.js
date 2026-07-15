@@ -19,11 +19,8 @@ const canonical = agents.replace(/\n\n\(Yes, this file also applies[\s\S]*?\)$/,
 const copies = [
   ['.cursor/rules/couponcoder.mdc', stripFrontmatter],
   ['.windsurf/rules/couponcoder.md', text => text.trim()],
-  ['.clinerules/couponcoder.md', text => text.trim()],
   ['.agents/rules/couponcoder.md', text => text.trim()],
-  ['.qoder/rules/couponcoder.md', text => text.trim()],
   ['.github/copilot-instructions.md', text => text.trim()],
-  ['.kiro/steering/couponcoder.md', stripFrontmatter],
 ];
 
 let failed = false;

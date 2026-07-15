@@ -153,12 +153,6 @@ gemini extensions install https://github.com/nsicilia/couponcoder
 Loads the ruleset as always-on context every session and registers the `/couponcoder` commands; the `skills/` ship too, activated when a task needs them.
 The Gemini adapter intentionally does not ship a root `hooks/hooks.json`: Gemini auto-loads that path, while Couponcoder's lifecycle hooks use Claude/Codex event names.
 
-### Qoder
-
-Qoder auto-loads `AGENTS.md` from the repo root as always-on context, so running couponcoder from a checkout works with zero setup. For per-project rules, copy [`.qoder/rules/couponcoder.md`](.qoder/rules/couponcoder.md) into your project's `.qoder/rules/`. The six couponcoder skills (`/couponcoder`, `/couponcoder-review`, `/couponcoder-audit`, `/couponcoder-debt`, `/couponcoder-gain`, `/couponcoder-help`) are available via Qoder's Skill system; the plugin manifest at [`.qoder-plugin/plugin.json`](.qoder-plugin/plugin.json) points at the `skills/` directory.
-
-For full plugin-tier support (automatic mode activation + ruleset injection on every prompt), add the hooks from [`hooks/qoder-hooks.json`](hooks/qoder-hooks.json) to your `.qoder/settings.json`. Replace `COUPONCODER_DIR` with the path to your couponcoder checkout. Qoder's `UserPromptSubmit` hook activates the default mode on first prompt and injects the ruleset every turn; `PreToolUse` with `task|Task` matcher injects the ruleset into subagents. Level switches (`/couponcoder lite|full|ultra|off`) work automatically.
-
 ### Antigravity CLI
 
 Google is renaming Gemini CLI to Antigravity CLI (the `agy` binary); the same extension installs there:
@@ -169,31 +163,9 @@ agy plugin install https://github.com/nsicilia/couponcoder
 
 It reuses this repo's `gemini-extension.json`. One difference: Antigravity converts the `/couponcoder` commands into skills, so you type them into the chat (e.g. `/couponcoder-review` as a message) instead of picking them from a slash menu. Until the migration completes (around June 18, 2026), `gemini extensions install` still works too. To run it as an always-on rule instead, drop the ruleset into `.agents/rules/`.
 
-### Hermes Agent
-
-```bash
-hermes plugins install nsicilia/couponcoder --enable
-```
-
-Restart Hermes after installing. The plugin injects the active Couponcoder mode before each LLM turn, registers the bundled skills as `couponcoder:<skill>`, and adds `/couponcoder`, `/couponcoder-review`, `/couponcoder-audit`, `/couponcoder-debt`, `/couponcoder-gain`, and `/couponcoder-help`. In shared gateways, restrict `/couponcoder` to trusted users with Hermes slash-command access controls; runtime mode is process-local.
-
 ### CodeWhale
 
 Reads `AGENTS.md` from the project root, zero setup. Copy [`AGENTS.md`](AGENTS.md) to your project, or run `codewhale` from a checkout of this repo. That's it.
-
-### Swival
-
-Stage the collection in your library first, then add the skills you want:
-
-```bash
-swival skills add --global https://github.com/nsicilia/couponcoder  # stage into ~/.config/swival/library
-swival skills add couponcoder                                             # install the collection into this project
-swival skills add --global couponcoder                                    # or activate it in every project
-```
-
-Swival also reads `AGENTS.md` from the project root and `~/.config/swival/AGENTS.md` globally, the instruction-only fallback.
-
-On the command line, use a `$` prefix to explicitly activate a skill. For example: `$couponcoder-review`.
 
 ### Devin CLI
 
@@ -203,14 +175,6 @@ devin plugins install nsicilia/couponcoder
 
 Installs couponcoder as a Devin plugin; skills are available as `/couponcoder:couponcoder`, `/couponcoder:couponcoder-review`, and so on.
 
-### OpenClaw
-
-```bash
-clawhub install couponcoder
-```
-
-Installs couponcoder as an OpenClaw skill from ClawHub; the review, audit, debt, gain, and help skills install the same way (`clawhub install couponcoder-review`, and so on). OpenClaw applies it on coding tasks and also exposes it as a `/couponcoder` command. Without ClawHub, copy [`.openclaw/skills/couponcoder`](.openclaw/skills/) into `~/.openclaw/skills/`.
-
 That was it. He'd be proud. He won't say it.
 
 Active every session, with a handful of commands (see [Commands](#commands)). `/couponcoder ultra` exists for when the codebase has wronged you personally. Startup and mode-change text shows the current mode.
@@ -219,17 +183,13 @@ Set the level for every new session with the `COUPONCODER_DEFAULT_MODE` env var 
 
 While active, the ruleset is also injected into every subagent spawned via the Agent tool. To scope that to specific agent types (say, keep it off read-only search agents), set the `COUPONCODER_SUBAGENT_MATCHER` env var to a regex tested against the subagent's `agent_type`. It is unanchored and case-insensitive: `explore|general` matches either, `^general$` is exact, and plugin agent types look like `plugin:name`. Unset means inject into every subagent (the default); an invalid regex, or a subagent whose type the platform doesn't report, also falls back to injecting.
 
-Cursor, Windsurf, Cline, GitHub Copilot Chat (the VS Code, JetBrains, and Visual Studio editor extension, not the standalone Copilot CLI covered under [Install](#install)), Aider, Kiro, Zed, CodeWhale, Swival, Qoder: copy the matching rules file from this repo ([`.cursor/rules/`](.cursor/rules/), [`.windsurf/rules/`](.windsurf/rules/), [`.clinerules/`](.clinerules/), [`.github/copilot-instructions.md`](.github/copilot-instructions.md), [`AGENTS.md`](AGENTS.md), [`.kiro/steering/`](.kiro/steering/), [`.qoder/rules/`](.qoder/rules/)).
-
-Kiro: copy `.kiro/steering/couponcoder.md` to `~/.kiro/steering/` (global) or `.kiro/steering/` in your project.
+Cursor, Windsurf, GitHub Copilot Chat (the VS Code, JetBrains, and Visual Studio editor extension, not the standalone Copilot CLI covered under [Install](#install)), Aider, CodeWhale: copy the matching rules file from this repo ([`.cursor/rules/`](.cursor/rules/), [`.windsurf/rules/`](.windsurf/rules/), [`.github/copilot-instructions.md`](.github/copilot-instructions.md), [`AGENTS.md`](AGENTS.md)).
 
 GitHub Copilot CLI fallback (instruction-only mode): it reads `AGENTS.md` and `.github/copilot-instructions.md` in a project, or copy the rules into `~/.copilot/copilot-instructions.md` to run couponcoder in every project. This path keeps always-on guidance, but does not add plugin mode switches or hooks.
 
 VS Code with the Codex extension reads `AGENTS.md`, which this repo ships, so it works from the repo root with no setup (`~/.codex/AGENTS.md` makes Codex global).
 
 JetBrains Junie can read `AGENTS.md` once you point it there in Settings → Tools → Junie → Project Settings → Guidelines Path (it is not automatic yet). This repo ships `AGENTS.md`; `.junie/guidelines.md` is Junie's legacy path.
-
-Amp (Sourcegraph) reads `AGENTS.md` from the working directory and parent directories up to `$HOME`, which this repo ships, so it works with no setup (`~/.config/amp/AGENTS.md` works globally).
 
 Jules (Google) reads `AGENTS.md` from the repository root, which this repo ships, so it picks up the ruleset with no setup.
 
@@ -243,7 +203,7 @@ Which files map to which agent: [Agent portability](docs/agent-portability.md).
 | Codex | `codex plugin remove couponcoder` |
 | Devin CLI | `devin plugins remove couponcoder` |
 | Pi agent | `pi uninstall couponcoder` |
-| Cursor / Windsurf / Cline / Qoder / etc. | Delete the copied rule file |
+| Cursor / Windsurf / etc. | Delete the copied rule file |
 
 These remove the plugin's own files. They leave behind a small amount of state couponcoder writes outside the plugin folder: the mode flag, `~/.config/couponcoder/config.json`, and (if you accepted the setup nudge) a `statusLine` entry in `~/.claude/settings.json`. Run `node scripts/uninstall.js` to clean those up too. **Run it before the host remove command above** — the script is itself a plugin file, so removing the plugin first deletes it (or run it from a separate clone of this repo). It only removes the statusLine entry if it points at couponcoder's own script, so a statusline you set up yourself is left untouched.
 
@@ -258,7 +218,7 @@ These remove the plugin's own files. They leave behind a small amount of state c
 | `/couponcoder-gain` | Show the measured impact scoreboard (less code, less cost, more speed) from the benchmark. |
 | `/couponcoder-help` | Quick reference for the commands above. |
 
-Commands need a skill-capable host (Claude Code, Codex, Devin CLI, OpenCode, Gemini, pi, Swival, Hermes Agent, Qoder). In Codex they're skills, invoke with `@` (`@couponcoder-review`). The instruction-only adapters (Cursor, Windsurf, Cline, Copilot, Kiro, Antigravity) load the always-on ruleset without the commands.
+Commands need a skill-capable host (Claude Code, Codex, Devin CLI, OpenCode, Gemini, pi). In Codex they're skills, invoke with `@` (`@couponcoder-review`). The instruction-only adapters (Cursor, Windsurf, Copilot, Antigravity) load the always-on ruleset without the commands.
 
 ## Development
 
@@ -268,8 +228,6 @@ When changing the compact rule text, keep the agent copies aligned:
 node scripts/check-rule-copies.js
 npm test
 ```
-
-The OpenClaw skill package (`.openclaw/skills/`) is generated from `skills/`; rerun `node scripts/build-openclaw-skills.js` after changing a skill, the test suite fails if it is stale. To publish the skills to ClawHub, run `clawhub login` once, then `node scripts/publish-openclaw-skills.js` (it publishes all six at the `package.json` version; pass `--dry-run` to preview).
 
 The correctness benchmark spawns Python for email and CSV checks; `python3` is tried before `python`. CSV checks need `pandas` installed locally.
 

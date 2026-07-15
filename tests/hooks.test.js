@@ -36,7 +36,6 @@ delete process.env.PLUGIN_DATA;
 delete process.env.COPILOT_PLUGIN_DATA;
 // A leaked subagent matcher would scope the inject-into-every-subagent assertions.
 delete process.env.COUPONCODER_SUBAGENT_MATCHER;
-delete process.env.QODER_SESSION_ID;
 
 const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'couponcoder-hooks-'));
 // Runs on normal exit and on assertion-throw exit; force makes it idempotent.
@@ -323,75 +322,6 @@ assert.equal(result.status, 0, result.stderr);
 output = JSON.parse(result.stdout);
 assert.match(output.hookSpecificOutput.additionalContext, /COUPONCODER MODE ACTIVE — level: full/);
 
-// Qoder: no SessionStart event, so UserPromptSubmit does double duty —
-// it activates the default mode on first prompt (writes flag), then injects
-// the ruleset via additionalContext on every prompt. Output is
-// hookSpecificOutput JSON (same shape as Codex minus systemMessage).
-const qoderHome = path.join(temp, 'qoder-home');
-const qoderState = path.join(qoderHome, '.qoder', '.couponcoder-active');
-fs.mkdirSync(qoderHome, { recursive: true });
-
-const qoderEnv = {
-  HOME: qoderHome,
-  USERPROFILE: qoderHome,
-  QODER_SESSION_ID: 'test-session-123',
-  COUPONCODER_DEFAULT_MODE: 'full',
-};
-
-// First prompt: no flag file yet → mode-tracker initializes from default,
-// writes flag, and injects the ruleset.
-result = run(
-  'couponcoder-mode-tracker.js',
-  qoderEnv,
-  JSON.stringify({ prompt: 'write a function' }),
-);
-assert.equal(result.status, 0, result.stderr);
-assert.equal(fs.readFileSync(qoderState, 'utf8'), 'full');
-output = JSON.parse(result.stdout);
-assert.equal(output.hookSpecificOutput.hookEventName, 'UserPromptSubmit');
-assert.match(
-  output.hookSpecificOutput.additionalContext,
-  /COUPONCODER MODE ACTIVE — level: full/,
-);
-
-// /couponcoder ultra: mode tracker updates flag and injects ultra ruleset.
-result = run(
-  'couponcoder-mode-tracker.js',
-  qoderEnv,
-  JSON.stringify({ prompt: '/couponcoder ultra' }),
-);
-assert.equal(result.status, 0, result.stderr);
-assert.equal(fs.readFileSync(qoderState, 'utf8'), 'ultra');
-output = JSON.parse(result.stdout);
-assert.match(
-  output.hookSpecificOutput.additionalContext,
-  /COUPONCODER MODE CHANGED — level: ultra/,
-);
-
-// "stop couponcoder": deactivates, clears flag, no ruleset output.
-result = run(
-  'couponcoder-mode-tracker.js',
-  qoderEnv,
-  JSON.stringify({ prompt: 'stop couponcoder' }),
-);
-assert.equal(result.status, 0, result.stderr);
-assert.equal(fs.existsSync(qoderState), false, 'flag must be cleared after stop couponcoder');
-output = JSON.parse(result.stdout);
-assert.equal(output.hookSpecificOutput.additionalContext, 'COUPONCODER MODE OFF');
-
-// Subagent injection via PreToolUse (task|Task matcher): when couponcoder is
-// active, the subagent hook injects the ruleset. Qoder shares the same
-// couponcoder-subagent.js script; the isQoder branch outputs hookSpecificOutput
-// JSON instead of raw stdout.
-fs.writeFileSync(qoderState, 'full');
-result = run('couponcoder-subagent.js', qoderEnv);
-assert.equal(result.status, 0, result.stderr);
-output = JSON.parse(result.stdout);
-assert.equal(output.hookSpecificOutput.hookEventName, 'SubagentStart');
-assert.match(
-  output.hookSpecificOutput.additionalContext,
-  /COUPONCODER MODE ACTIVE — level: full/,
-);
 // writeDefaultMode must merge into existing config, not overwrite it (#490).
 const mergeHome = path.join(temp, 'merge-home');
 const mergeConfigDir = path.join(mergeHome, '.config', 'couponcoder');

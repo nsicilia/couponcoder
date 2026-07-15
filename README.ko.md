@@ -203,20 +203,6 @@ agy plugin install https://github.com/nsicilia/couponcoder
 
 프로젝트 루트의 `AGENTS.md`를 읽고, 설정은 전혀 필요 없다. [`AGENTS.md`](AGENTS.md)를 프로젝트에 복사하거나, 이 저장소를 체크아웃한 곳에서 `codewhale`을 돌리면 된다. 그게 끝이다.
 
-### Swival
-
-먼저 컬렉션을 라이브러리에 스테이징한 다음, 원하는 스킬을 더한다:
-
-```bash
-swival skills add --global https://github.com/nsicilia/couponcoder  # ~/.config/swival/library에 스테이징
-swival skills add couponcoder                                             # 이 프로젝트에 컬렉션 설치
-swival skills add --global couponcoder                                    # 또는 모든 프로젝트에서 켜기
-```
-
-Swival도 프로젝트 루트의 `AGENTS.md`와 전역의 `~/.config/swival/AGENTS.md`를 읽는다. 지시문 전용 폴백이다.
-
-명령줄에서는 `$` 접두사로 스킬을 명시적으로 켠다. 예: `$couponcoder-review`.
-
 ### Devin CLI
 
 ```bash
@@ -225,23 +211,13 @@ devin plugins install nsicilia/couponcoder
 
 couponcoder을 Devin 플러그인으로 설치한다. 스킬은 `/couponcoder:couponcoder`, `/couponcoder:couponcoder-review` 등으로 쓸 수 있다.
 
-### OpenClaw
-
-```bash
-clawhub install couponcoder
-```
-
-ClawHub에서 couponcoder을 OpenClaw 스킬로 설치한다. review, audit, debt, gain, help 스킬도 같은 식으로 깐다(`clawhub install couponcoder-review` 등). OpenClaw는 코딩 작업에 이를 적용하고 `/couponcoder` 명령으로도 열어 준다. ClawHub가 없으면 [`.openclaw/skills/couponcoder`](.openclaw/skills/)을 `~/.openclaw/skills/`에 복사하면 된다.
-
 이게 끝이었다. 그 사람이라면 흐뭇해할 거다. 입 밖으로 내진 않겠지만.
 
 매 세션 켜져 있고, 명령 몇 개가 딸려 온다([Commands](#commands) 참고). `/couponcoder ultra`는 코드베이스가 당신에게 단단히 밉보인 날을 위해 있다. 시작할 때와 모드를 바꿀 때 지금 모드를 보여 준다.
 
 새 세션마다 적용할 레벨은 `COUPONCODER_DEFAULT_MODE` 환경 변수(`lite`/`full`/`ultra`/`off`)로, 또는 `~/.config/couponcoder/config.json`의 `defaultMode` 필드(Windows에선 `%APPDATA%\couponcoder\config.json`)로 정한다. 기본값은 `full`이다.
 
-Cursor, Windsurf, Cline, GitHub Copilot(에디터), Aider, Kiro, Zed, CodeWhale: 이 저장소에서 맞는 규칙 파일을 복사하면 된다([`.cursor/rules/`](.cursor/rules/), [`.windsurf/rules/`](.windsurf/rules/), [`.clinerules/`](.clinerules/), [`.github/copilot-instructions.md`](.github/copilot-instructions.md), [`AGENTS.md`](AGENTS.md), [`.kiro/steering/`](.kiro/steering/)).
-
-Kiro: `.kiro/steering/couponcoder.md`를 `~/.kiro/steering/`(전역)이나 프로젝트의 `.kiro/steering/`에 복사한다.
+Cursor, Windsurf, GitHub Copilot(에디터), Aider, CodeWhale: 이 저장소에서 맞는 규칙 파일을 복사하면 된다([`.cursor/rules/`](.cursor/rules/), [`.windsurf/rules/`](.windsurf/rules/), [`.github/copilot-instructions.md`](.github/copilot-instructions.md), [`AGENTS.md`](AGENTS.md)).
 
 GitHub Copilot CLI 폴백(지시문 전용 모드): 프로젝트의 `AGENTS.md`와 `.github/copilot-instructions.md`를 읽거나, 모든 프로젝트에서 couponcoder을 돌리려면 규칙을 `~/.copilot/copilot-instructions.md`에 복사한다. 이 경로는 늘 켜진 가이드는 살리지만, 플러그인 모드 전환이나 훅은 더해 주지 않는다.
 
@@ -260,7 +236,7 @@ Codex 확장을 쓰는 VS Code는 이 저장소가 함께 싣는 `AGENTS.md`를 
 | `/couponcoder-gain` | 벤치마크로 잰 효과 스코어보드(코드 절감, 비용 절감, 속도 향상)를 보여 준다. |
 | `/couponcoder-help` | 위 명령들의 빠른 참조. |
 
-명령들은 스킬을 지원하는 호스트가 있어야 돈다(Claude Code, Codex, Devin CLI, OpenCode, Gemini, pi, Swival). Codex에선 스킬이라 `@`로 부른다(`@couponcoder-review`). 지시문 전용 어댑터(Cursor, Windsurf, Cline, Copilot, Kiro, Antigravity)는 명령 없이 늘 켜진 룰셋만 불러온다.
+명령들은 스킬을 지원하는 호스트가 있어야 돈다(Claude Code, Codex, Devin CLI, OpenCode, Gemini, pi). Codex에선 스킬이라 `@`로 부른다(`@couponcoder-review`). 지시문 전용 어댑터(Cursor, Windsurf, Copilot, Antigravity)는 명령 없이 늘 켜진 룰셋만 불러온다.
 
 ## Development
 
@@ -270,8 +246,6 @@ Codex 확장을 쓰는 VS Code는 이 저장소가 함께 싣는 `AGENTS.md`를 
 node scripts/check-rule-copies.js
 npm test
 ```
-
-OpenClaw 스킬 패키지(`.openclaw/skills/`)는 `skills/`에서 생성된다. 스킬을 바꾼 뒤에는 `node scripts/build-openclaw-skills.js`를 다시 돌린다. 묵은 상태면 테스트 스위트가 실패한다.
 
 정확성 벤치마크는 이메일·CSV 검사를 위해 Python을 띄운다. `python`보다 `python3`를 먼저 시도한다. CSV 검사는 로컬에 `pandas`가 깔려 있어야 한다.
 

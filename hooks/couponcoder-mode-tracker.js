@@ -3,8 +3,7 @@
 // Inspects user input for /couponcoder commands and writes mode to flag file
 
 const { getDefaultMode, isDeactivationCommand, writeDefaultMode } = require('./couponcoder-config');
-const { clearMode, isQoder, readMode, setMode, writeHookOutput } = require('./couponcoder-runtime');
-const { getCouponcoderInstructions } = require('./couponcoder-instructions');
+const { clearMode, readMode, setMode, writeHookOutput } = require('./couponcoder-runtime');
 
 let input = '';
 let done = false;
@@ -64,16 +63,11 @@ function finish() {
       } else if (mode && mode !== 'off') {
         setMode(mode);
         modeSwitched = true;
-        // couponcoder: Qoder needs the full ruleset every turn, so when a mode
-        // switch happens we fold the confirmation into the ruleset output
-        // below (one JSON on stdout) instead of emitting two separate writes.
-        if (!isQoder) {
-          writeHookOutput(
-            'UserPromptSubmit',
-            mode,
-            'COUPONCODER MODE CHANGED — level: ' + mode,
-          );
-        }
+        writeHookOutput(
+          'UserPromptSubmit',
+          mode,
+          'COUPONCODER MODE CHANGED — level: ' + mode,
+        );
       } else if (mode === 'off') {
         clearMode();
         deactivated = true;
@@ -88,29 +82,6 @@ function finish() {
       writeHookOutput('UserPromptSubmit', 'off', 'COUPONCODER MODE OFF');
     }
 
-    // Qoder has no SessionStart event, so UserPromptSubmit does double duty:
-    // activate the default mode on first prompt (if no flag exists yet), then
-    // inject the ruleset on every prompt. Claude Code/Codex do this in
-    // SessionStart via couponcoder-activate.js; Qoder can't, so we do it here.
-    // Skip when deactivated — user just turned couponcoder off.
-    if (isQoder && !deactivated) {
-      let currentMode = readMode();
-      if (!currentMode) {
-        // First prompt in session — initialize from config/env default
-        currentMode = getDefaultMode();
-        if (currentMode !== 'off') {
-          try { setMode(currentMode); } catch (e) {}
-        }
-      }
-      if (currentMode && currentMode !== 'off') {
-        // couponcoder: one JSON per invocation — mode-switch confirmation is
-        // folded into the ruleset header so Qoder gets both in one write.
-        const header = modeSwitched
-          ? 'COUPONCODER MODE CHANGED — level: ' + currentMode + '\n\n'
-          : '';
-        writeHookOutput('UserPromptSubmit', currentMode, header + getCouponcoderInstructions(currentMode));
-      }
-    }
   } catch (e) {
     // Silent fail
   }

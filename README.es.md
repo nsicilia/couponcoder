@@ -206,23 +206,13 @@ devin plugins install nsicilia/couponcoder
 
 Instala couponcoder como plugin de Devin; los skills quedan disponibles como `/couponcoder:couponcoder`, `/couponcoder:couponcoder-review`, etc.
 
-### OpenClaw
-
-```bash
-clawhub install couponcoder
-```
-
-Instala couponcoder como skill de OpenClaw desde ClawHub; los skills de review, audit, debt y help se instalan igual (`clawhub install couponcoder-review`, etc.). OpenClaw lo aplica en tareas de código y también lo expone como comando `/couponcoder`. Sin ClawHub, copia [`.openclaw/skills/couponcoder`](.openclaw/skills/) a `~/.openclaw/skills/`.
-
 Eso fue todo. Él estaría orgulloso. No lo va a decir.
 
 Activo en cada sesión, con un puñado de comandos (ver [Comandos](#comandos)). `/couponcoder ultra` existe para cuando el codebase te hizo algo personal. El texto de inicio y de cambio de modo muestra el nivel activo.
 
 Configura el nivel para cada nueva sesión con la variable de entorno `COUPONCODER_DEFAULT_MODE` (`lite`/`full`/`ultra`/`off`), o con un campo `defaultMode` en `~/.config/couponcoder/config.json` (`%APPDATA%\couponcoder\config.json` en Windows). El default es `full`.
 
-Cursor, Windsurf, Cline, GitHub Copilot (editor), Aider, Kiro: copia el archivo de reglas correspondiente de este repo ([`.cursor/rules/`](.cursor/rules/), [`.windsurf/rules/`](.windsurf/rules/), [`.clinerules/`](.clinerules/), [`.github/copilot-instructions.md`](.github/copilot-instructions.md), [`AGENTS.md`](AGENTS.md), [`.kiro/steering/`](.kiro/steering/)).
-
-Kiro: copia `.kiro/steering/couponcoder.md` a `~/.kiro/steering/` (global) o `.kiro/steering/` en tu proyecto.
+Cursor, Windsurf, GitHub Copilot (editor), Aider: copia el archivo de reglas correspondiente de este repo ([`.cursor/rules/`](.cursor/rules/), [`.windsurf/rules/`](.windsurf/rules/), [`.github/copilot-instructions.md`](.github/copilot-instructions.md), [`AGENTS.md`](AGENTS.md)).
 
 Fallback de GitHub Copilot CLI (modo solo instrucciones): lee `AGENTS.md` y `.github/copilot-instructions.md` en un proyecto, o copia las reglas a `~/.copilot/copilot-instructions.md` para ejecutar couponcoder en todos tus proyectos. Esta vía mantiene la guía permanente, pero no agrega switches de modo ni hooks.
 
@@ -240,7 +230,7 @@ Qué archivos corresponden a qué agente: [Portabilidad de agentes](docs/agent-p
 | `/couponcoder-debt` | Recolecta los atajos marcados con `couponcoder:` que dejaste pendientes en un registro, para que "después" no se convierta en "nunca". |
 | `/couponcoder-help` | Referencia rápida de los comandos anteriores. |
 
-Los comandos requieren un host compatible con skills (Claude Code, Codex, Devin CLI, OpenCode, Gemini, pi, Swival). En Codex son skills; se invocan con `@` (`@couponcoder-review`). Los adaptadores de solo instrucciones (Cursor, Windsurf, Cline, Copilot, Kiro, Antigravity) cargan el ruleset permanente sin los comandos.
+Los comandos requieren un host compatible con skills (Claude Code, Codex, Devin CLI, OpenCode, Gemini, pi). En Codex son skills; se invocan con `@` (`@couponcoder-review`). Los adaptadores de solo instrucciones (Cursor, Windsurf, Copilot, Antigravity) cargan el ruleset permanente sin los comandos.
 
 ## Desarrollo
 
@@ -250,8 +240,6 @@ Al cambiar el texto compacto de las reglas, mantén alineadas las copias en los 
 node scripts/check-rule-copies.js
 npm test
 ```
-
-El paquete de skills de OpenClaw (`.openclaw/skills/`) se genera desde `skills/`; ejecuta `node scripts/build-openclaw-skills.js` después de cambiar un skill, la suite de tests falla si está desactualizado.
 
 El benchmark de correctness lanza Python para las verificaciones de email y CSV; se prueba `python3` antes que `python`. Las verificaciones de CSV requieren `pandas` instalado localmente.
 
