@@ -1,9 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
-const { getClaudeDir, getConfigDir } = require('./ponytail-config');
+const { getClaudeDir, getConfigDir } = require('./couponcoder-config');
 
-const STATE_FILE = '.ponytail-active';
+const STATE_FILE = '.couponcoder-active';
 const isCopilot = Boolean(process.env.COPILOT_PLUGIN_DATA);
 const isCodex = !isCopilot && Boolean(process.env.PLUGIN_DATA);
 const isQoder = !isCopilot && !isCodex && Boolean(process.env.QODER_SESSION_ID);
@@ -24,7 +24,7 @@ function clearMode() {
   try { fs.unlinkSync(statePath); } catch (e) {}
 }
 
-// Live mode written by activate/mode-tracker. Absent flag = ponytail off.
+// Live mode written by activate/mode-tracker. Absent flag = couponcoder off.
 function readMode() {
   try {
     return fs.readFileSync(statePath, 'utf8').trim() || null;
@@ -41,7 +41,7 @@ function writeHookOutput(event, mode, context = '') {
     return;
   }
   if (isCodex) {
-    const output = { systemMessage: `PONYTAIL:${mode.toUpperCase()}` };
+    const output = { systemMessage: `COUPONCODER:${mode.toUpperCase()}` };
     if (context) {
       output.hookSpecificOutput = {
         hookEventName: event,

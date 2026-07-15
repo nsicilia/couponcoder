@@ -1,27 +1,27 @@
 {
-  "name": "ponytail",
+  "name": "couponcoder",
   "version": "4.8.4",
   "description": "Lazy senior dev mode. Forces the simplest, shortest solution that actually works: YAGNI, stdlib first, no unrequested abstractions.",
   "author": {
     "name": "Dietrich Gebert",
-    "url": "https://github.com/DietrichGebert"
+    "url": "https://github.com/NickSicilianoSalazar"
   },
-  "homepage": "https://github.com/DietrichGebert/ponytail",
-  "repository": "https://github.com/DietrichGebert/ponytail",
+  "homepage": "https://github.com/NickSicilianoSalazar/couponcoder",
+  "repository": "https://github.com/NickSicilianoSalazar/couponcoder",
   "license": "MIT",
   "keywords": ["yagni", "minimalism", "code-review", "productivity"],
   "skills": "./skills/",
   "hooks": "./hooks/claude-codex-hooks.json",
   "interface": {
-    "displayName": "Ponytail",
+    "displayName": "Couponcoder",
     "shortDescription": "Lazy senior developer mode",
     "longDescription": "Prefer YAGNI, the standard library, native platform features, and the smallest correct implementation.",
     "developerName": "Dietrich Gebert",
     "category": "Productivity",
     "capabilities": ["Instructions", "Lifecycle hooks"],
-    "websiteURL": "https://github.com/DietrichGebert/ponytail",
+    "websiteURL": "https://github.com/NickSicilianoSalazar/couponcoder",
     "defaultPrompt": [
-      "Use Ponytail mode for this task.",
+      "Use Couponcoder mode for this task.",
       "Review this diff for over-engineering.",
       "Find the smallest correct implementation."
     ],

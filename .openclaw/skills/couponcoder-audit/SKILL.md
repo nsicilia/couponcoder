@@ -1,16 +1,16 @@
 ---
-name: ponytail-audit
+name: couponcoder-audit
 description: "Audit the whole repo for over-engineering. A ranked list of what to delete, simplify, or replace with stdlib or native features."
-homepage: https://github.com/DietrichGebert/ponytail
+homepage: https://github.com/NickSicilianoSalazar/couponcoder
 license: MIT
 ---
 
-ponytail-review, repo-wide. Scan the whole tree instead of a diff. Rank
+couponcoder-review, repo-wide. Scan the whole tree instead of a diff. Rank
 findings biggest cut first.
 
 ## Tags
 
-Same as ponytail-review:
+Same as couponcoder-review:
 
 - `delete:` dead code, unused flexibility, speculative feature. Replacement: nothing.
 - `stdlib:` hand-rolled thing the standard library ships. Name the function.
@@ -34,4 +34,4 @@ End with `net: -<N> lines, -<M> deps possible.` Nothing to cut: `Lean already. S
 Scope: over-engineering and complexity only. Correctness bugs, security holes,
 and performance are explicitly out of scope. Route them to a normal review
 pass. Lists findings, applies nothing. One-shot.
-"stop ponytail-audit" or "normal mode" to revert.
+"stop couponcoder-audit" or "normal mode" to revert.

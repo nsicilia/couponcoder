@@ -1,14 +1,14 @@
 {
-  "name": "ponytail",
+  "name": "couponcoder",
   "interface": {
-    "displayName": "Ponytail"
+    "displayName": "Couponcoder"
   },
   "plugins": [
     {
-      "name": "ponytail",
+      "name": "couponcoder",
       "source": {
         "source": "url",
-        "url": "https://github.com/DietrichGebert/ponytail.git",
+        "url": "https://github.com/NickSicilianoSalazar/couponcoder.git",
         "ref": "main"
       },
       "policy": {

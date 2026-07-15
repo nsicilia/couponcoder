@@ -1,7 +1,7 @@
 ---
-name: ponytail-review
+name: couponcoder-review
 description: "Review a diff for over-engineering. Finds what to delete: reinvented stdlib, needless deps, speculative abstractions. One line per finding."
-homepage: https://github.com/DietrichGebert/ponytail
+homepage: https://github.com/NickSicilianoSalazar/couponcoder
 license: MIT
 ---
 
@@ -47,6 +47,6 @@ If there is nothing to cut, say `Lean already. Ship.` and stop.
 Scope: over-engineering and complexity only. Correctness bugs, security holes,
 and performance are explicitly out of scope. Route them to a normal review
 pass, not this one. A single smoke test or `assert`-based
-self-check is the ponytail minimum, not bloat, never flag it for deletion.
+self-check is the couponcoder minimum, not bloat, never flag it for deletion.
 Does not apply the fixes, only lists them.
-"stop ponytail-review" or "normal mode": revert to verbose review style.
+"stop couponcoder-review" or "normal mode": revert to verbose review style.

@@ -1,22 +1,22 @@
 #!/usr/bin/env node
-// ponytail — Claude Code SessionStart activation hook
+// couponcoder — Claude Code SessionStart activation hook
 //
 // Runs on every session start:
-//   1. Writes flag file at $CLAUDE_CONFIG_DIR/.ponytail-active (defaults to ~/.claude; statusline reads this)
-//   2. Emits ponytail ruleset as hidden SessionStart context
+//   1. Writes flag file at $CLAUDE_CONFIG_DIR/.couponcoder-active (defaults to ~/.claude; statusline reads this)
+//   2. Emits couponcoder ruleset as hidden SessionStart context
 //   3. Detects missing statusline config and emits setup nudge
 
 const fs = require('fs');
 const path = require('path');
-const { getDefaultMode, getClaudeDir, isShellSafe } = require('./ponytail-config');
-const { getPonytailInstructions } = require('./ponytail-instructions');
+const { getDefaultMode, getClaudeDir, isShellSafe } = require('./couponcoder-config');
+const { getCouponcoderInstructions } = require('./couponcoder-instructions');
 const {
   clearMode,
   isCodex,
   isCopilot,
   setMode,
   writeHookOutput,
-} = require('./ponytail-runtime');
+} = require('./couponcoder-runtime');
 
 const claudeDir = getClaudeDir();
 const settingsPath = path.join(claudeDir, 'settings.json');
@@ -38,8 +38,8 @@ try {
   // Silent fail -- flag is best-effort, don't block the hook
 }
 
-// 2. Emit the ponytail ruleset, filtered to the active intensity level.
-let output = getPonytailInstructions(mode);
+// 2. Emit the couponcoder ruleset, filtered to the active intensity level.
+let output = getCouponcoderInstructions(mode);
 
 // 3. Detect missing statusline config — nudge Claude to help set it up
 if (!isCodex && !isCopilot) try {
@@ -56,11 +56,11 @@ if (!isCodex && !isCopilot) try {
   // Nudge at most once — the flag file marks that the user has already seen
   // (and implicitly declined) the statusline setup offer. Repeating it every
   // session start turns a helpful hint into a nag.
-  const nudgeFlagPath = path.join(claudeDir, '.ponytail-statusline-nudged');
+  const nudgeFlagPath = path.join(claudeDir, '.couponcoder-statusline-nudged');
   if (!hasStatusline && !fs.existsSync(nudgeFlagPath)) {
     try { fs.writeFileSync(nudgeFlagPath, ''); } catch (e) { /* best-effort */ }
     const isWindows = process.platform === 'win32';
-    const scriptName = isWindows ? 'ponytail-statusline.ps1' : 'ponytail-statusline.sh';
+    const scriptName = isWindows ? 'couponcoder-statusline.ps1' : 'couponcoder-statusline.sh';
     const scriptPath = path.join(__dirname, scriptName);
     if (isShellSafe(scriptPath)) {
       const command = isWindows
@@ -69,16 +69,16 @@ if (!isCodex && !isCopilot) try {
       const statusLineSnippet =
         '"statusLine": { "type": "command", "command": ' + JSON.stringify(command) + ' }';
       output += "\n\n" +
-        "STATUSLINE SETUP NEEDED: The ponytail plugin includes a statusline badge showing active mode " +
-        "(e.g. [PONYTAIL], [PONYTAIL:ULTRA]). It is not configured yet. " +
+        "STATUSLINE SETUP NEEDED: The couponcoder plugin includes a statusline badge showing active mode " +
+        "(e.g. [COUPONCODER], [COUPONCODER:ULTRA]). It is not configured yet. " +
         "To enable, add this to " + settingsPath + ": " +
         statusLineSnippet + " " +
         "Proactively offer to set this up for the user on first interaction.";
     } else {
-      // ponytail: install path has shell metacharacters — don't embed it in a
+      // couponcoder: install path has shell metacharacters — don't embed it in a
       // command snippet; have the agent wire it up by hand instead.
       output += "\n\n" +
-        "STATUSLINE SETUP NEEDED: The ponytail plugin includes a statusline badge showing active mode. " +
+        "STATUSLINE SETUP NEEDED: The couponcoder plugin includes a statusline badge showing active mode. " +
         "Its install path contains characters unsafe to embed in a shell command, so configure it manually: " +
         "add a statusLine command of type \"command\" that runs " + scriptName +
         " from the plugin's hooks directory to " + settingsPath + ", quoting/escaping the path for your shell. " +

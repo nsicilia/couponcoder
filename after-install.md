@@ -1,22 +1,22 @@
-# Ponytail for Hermes installed
+# Couponcoder for Hermes installed
 
 Enable it if you did not install with `--enable`:
 
 ```bash
-hermes plugins enable ponytail
+hermes plugins enable couponcoder
 ```
 
 Restart Hermes or the gateway after enabling.
 
-In shared gateways, restrict `/ponytail` to trusted users with Hermes slash-command access controls; runtime mode is process-local.
+In shared gateways, restrict `/couponcoder` to trusted users with Hermes slash-command access controls; runtime mode is process-local.
 
 Commands:
 
-- `/ponytail [lite|full|ultra|off]`
-- `/ponytail-review [target]`
-- `/ponytail-audit [target]`
-- `/ponytail-debt`
-- `/ponytail-gain`
-- `/ponytail-help`
+- `/couponcoder [lite|full|ultra|off]`
+- `/couponcoder-review [target]`
+- `/couponcoder-audit [target]`
+- `/couponcoder-debt`
+- `/couponcoder-gain`
+- `/couponcoder-help`
 
-Bundled skills are available as `ponytail:ponytail`, `ponytail:ponytail-review`, `ponytail:ponytail-audit`, `ponytail:ponytail-debt`, `ponytail:ponytail-gain`, and `ponytail:ponytail-help`.
+Bundled skills are available as `couponcoder:couponcoder`, `couponcoder:couponcoder-review`, `couponcoder:couponcoder-audit`, `couponcoder:couponcoder-debt`, `couponcoder:couponcoder-gain`, and `couponcoder:couponcoder-help`.
