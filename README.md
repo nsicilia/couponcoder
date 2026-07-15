@@ -46,7 +46,7 @@ Five everyday tasks, three models, three arms (no skill, [caveman](https://githu
   <img src="assets/benchmark-3model.svg" width="860" alt="Median lines of code per arm across Haiku, Sonnet and Opus">
 </p>
 
-This showed **80-94% less code**. [#126](https://github.com/NickSicilianoSalazar/couponcoder/issues/126) fairly pointed out that the bare-model baseline pads its answer with prose and options, so that gap is partly a conversational-baseline artifact. The agentic numbers above are the corrected, defensible version. Reproduce the single-shot run with `npx promptfoo eval -c benchmarks/promptfooconfig.yaml`.
+This showed **80-94% less code**. [#126](https://github.com/nsicilia/couponcoder/issues/126) fairly pointed out that the bare-model baseline pads its answer with prose and options, so that gap is partly a conversational-baseline artifact. The agentic numbers above are the corrected, defensible version. Reproduce the single-shot run with `npx promptfoo eval -c benchmarks/promptfooconfig.yaml`.
 
 </details>
 
@@ -79,7 +79,7 @@ The Claude Code and Codex plugins run two tiny Node.js lifecycle hooks, so `node
 ### Claude Code
 
 ```
-/plugin marketplace add NickSicilianoSalazar/couponcoder
+/plugin marketplace add nsicilia/couponcoder
 ```
 ```
 /plugin install couponcoder@couponcoder
@@ -91,7 +91,7 @@ Same steps in the Claude Code Desktop app's Code tab: type the two `/plugin` com
 ### Codex
 
 ```bash
-codex plugin marketplace add NickSicilianoSalazar/couponcoder
+codex plugin marketplace add nsicilia/couponcoder
 codex plugin add couponcoder@couponcoder
 ```
 
@@ -102,14 +102,14 @@ This same install also covers the Codex desktop app: restart the app after insta
 ### GitHub Copilot CLI
 
 ```bash
-copilot plugin marketplace add NickSicilianoSalazar/couponcoder
+copilot plugin marketplace add nsicilia/couponcoder
 copilot plugin install couponcoder@couponcoder
 ```
 
 In an interactive Copilot CLI session, use the slash equivalents:
 
 ```
-/plugin marketplace add NickSicilianoSalazar/couponcoder
+/plugin marketplace add nsicilia/couponcoder
 /plugin install couponcoder@couponcoder
 ```
 
@@ -123,7 +123,7 @@ Copilot CLI namespaces plugin commands by plugin name. For example:
 ### Pi agent harness
 
 ```
-pi install git:github.com/NickSicilianoSalazar/couponcoder
+pi install git:github.com/nsicilia/couponcoder
 ```
 
 ### OpenCode
@@ -147,7 +147,7 @@ The `./` path resolves against your project's `opencode.json`; to share one chec
 ### Gemini CLI
 
 ```bash
-gemini extensions install https://github.com/NickSicilianoSalazar/couponcoder
+gemini extensions install https://github.com/nsicilia/couponcoder
 ```
 
 Loads the ruleset as always-on context every session and registers the `/couponcoder` commands; the `skills/` ship too, activated when a task needs them.
@@ -164,7 +164,7 @@ For full plugin-tier support (automatic mode activation + ruleset injection on e
 Google is renaming Gemini CLI to Antigravity CLI (the `agy` binary); the same extension installs there:
 
 ```bash
-agy plugin install https://github.com/NickSicilianoSalazar/couponcoder
+agy plugin install https://github.com/nsicilia/couponcoder
 ```
 
 It reuses this repo's `gemini-extension.json`. One difference: Antigravity converts the `/couponcoder` commands into skills, so you type them into the chat (e.g. `/couponcoder-review` as a message) instead of picking them from a slash menu. Until the migration completes (around June 18, 2026), `gemini extensions install` still works too. To run it as an always-on rule instead, drop the ruleset into `.agents/rules/`.
@@ -172,7 +172,7 @@ It reuses this repo's `gemini-extension.json`. One difference: Antigravity conve
 ### Hermes Agent
 
 ```bash
-hermes plugins install NickSicilianoSalazar/couponcoder --enable
+hermes plugins install nsicilia/couponcoder --enable
 ```
 
 Restart Hermes after installing. The plugin injects the active Couponcoder mode before each LLM turn, registers the bundled skills as `couponcoder:<skill>`, and adds `/couponcoder`, `/couponcoder-review`, `/couponcoder-audit`, `/couponcoder-debt`, `/couponcoder-gain`, and `/couponcoder-help`. In shared gateways, restrict `/couponcoder` to trusted users with Hermes slash-command access controls; runtime mode is process-local.
@@ -186,7 +186,7 @@ Reads `AGENTS.md` from the project root, zero setup. Copy [`AGENTS.md`](AGENTS.m
 Stage the collection in your library first, then add the skills you want:
 
 ```bash
-swival skills add --global https://github.com/NickSicilianoSalazar/couponcoder  # stage into ~/.config/swival/library
+swival skills add --global https://github.com/nsicilia/couponcoder  # stage into ~/.config/swival/library
 swival skills add couponcoder                                             # install the collection into this project
 swival skills add --global couponcoder                                    # or activate it in every project
 ```
@@ -198,7 +198,7 @@ On the command line, use a `$` prefix to explicitly activate a skill. For exampl
 ### Devin CLI
 
 ```bash
-devin plugins install NickSicilianoSalazar/couponcoder
+devin plugins install nsicilia/couponcoder
 ```
 
 Installs couponcoder as a Devin plugin; skills are available as `/couponcoder:couponcoder`, `/couponcoder:couponcoder-review`, and so on.
@@ -276,3 +276,7 @@ The correctness benchmark spawns Python for email and CSV checks; `python3` is t
 ## License
 
 [MIT](LICENSE). The shortest license that works.
+
+## Credits
+
+A fork of [ponytail](https://github.com/DietrichGebert/ponytail) by Dietrich Gebert, used under the MIT license.

@@ -5,16 +5,16 @@
   "keywords": ["opencode-plugin", "opencode", "couponcoder", "pi-package", "pi", "skills", "qoder"],
   "license": "MIT",
   "author": {
-    "name": "Dietrich Gebert",
-    "url": "https://github.com/NickSicilianoSalazar"
+    "name": "Nicholas Siciliano",
+    "url": "https://github.com/nsicilia"
   },
-  "homepage": "https://github.com/NickSicilianoSalazar/couponcoder",
+  "homepage": "https://github.com/nsicilia/couponcoder",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/NickSicilianoSalazar/couponcoder.git"
+    "url": "git+https://github.com/nsicilia/couponcoder.git"
   },
   "bugs": {
-    "url": "https://github.com/NickSicilianoSalazar/couponcoder/issues"
+    "url": "https://github.com/nsicilia/couponcoder/issues"
   },
   "main": "./.opencode/plugins/couponcoder.mjs",
   "exports": {

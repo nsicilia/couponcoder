@@ -12,13 +12,20 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    # Gate: this job can mint an OIDC token and publish under the org identity,
+    # so it must not be a one-person action. Required reviewers are configured on
+    # the environment itself (Settings > Environments > release) — this line alone
+    # enforces nothing until they are set there.
+    environment: release
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: '22'
       # Trusted publishing (OIDC) needs npm >= 11.5.1; Node 22 ships npm 10.
-      - run: npm install -g npm@latest
+      # Pinned exactly: `npm@latest` pulled an unreviewed package into the job
+      # holding id-token: write, moments before it authenticates.
+      - run: npm install -g npm@12.0.1
       # No token: id-token: write above lets npm authenticate via OIDC, and
       # provenance is attached automatically. access set in publishConfig.
       - run: npm publish

