@@ -24,3 +24,8 @@ couponcoder-*.gif
 
 # agentic benchmark workspaces (agent output, kept locally for inspection)
 benchmarks/agentic/runs/
+
+# VSIX build output (hooks/ + skills/ copied in at prepublish)
+vscode-extension/bundled/
+vscode-extension/*.vsix
+vscode-extension/LICENSE

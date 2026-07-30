@@ -99,6 +99,17 @@ Same steps in the Claude Code Desktop app's Code tab: type the two `/plugin` com
 /plugin install couponcoder@couponcoder
 ```
 
+**On older VS Code (1.90+), without the Claude Code extension** — build and sideload the bundled chat participant:
+
+```bash
+npm run package --prefix vscode-extension
+```
+```bash
+code --install-extension vscode-extension/couponcoder-4.8.4.vsix
+```
+
+Then talk to `@couponcoder` in the Chat view. `/lite`, `/full`, `/ultra` and `/off` switch levels, and the level sticks per workspace. It borrows a model from GitHub Copilot Chat, so that extension has to be installed and signed in. 1.90 is the floor because it is the first release with a stable chat participant API; older versions have no AI extension point at all — use the Copilot instructions file below.
+
 **With the Codex extension** — nothing to install. It reads [`AGENTS.md`](AGENTS.md), which this repo ships, so it works from the repo root as-is. Copy `AGENTS.md` into your own project to use it there, or put it at `~/.codex/AGENTS.md` to make it global. Always-on rules, no `/couponcoder` levels.
 
 **With GitHub Copilot Chat** — copy [`.github/copilot-instructions.md`](.github/copilot-instructions.md) into your project. Always-on rules, no `/couponcoder` levels.
@@ -116,7 +127,7 @@ Same steps in the Claude Code Desktop app's Code tab: type the two `/plugin` com
 /plugin install couponcoder@couponcoder
 ```
 
-**With Junie** — copy [`AGENTS.md`](AGENTS.md) into your project, then point Junie at it: **Settings → Tools → Junie → Project Settings → Guidelines Path**. Junie does not pick it up automatically yet, so this step is required. (`.junie/guidelines.md` is Junie's legacy path if you prefer it.) Always-on rules, no `/couponcoder` levels.
+**With Junie** — copy [`.junie/guidelines.md`](.junie/guidelines.md) into your project. Junie reads that path on its own, so there is nothing to configure. (Alternatively copy [`AGENTS.md`](AGENTS.md) and point Junie at it under **Settings → Tools → Junie → Project Settings → Guidelines Path** — same rules, one more step.) Always-on rules, no `/couponcoder` levels.
 
 **With GitHub Copilot Chat** — copy [`.github/copilot-instructions.md`](.github/copilot-instructions.md) into your project. Always-on rules, no `/couponcoder` levels.
 

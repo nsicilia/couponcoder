@@ -21,6 +21,7 @@ const copies = [
   ['.windsurf/rules/couponcoder.md', text => text.trim()],
   ['.agents/rules/couponcoder.md', text => text.trim()],
   ['.github/copilot-instructions.md', text => text.trim()],
+  ['.junie/guidelines.md', text => text.trim()],
 ];
 
 let failed = false;
