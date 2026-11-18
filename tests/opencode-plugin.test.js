@@ -77,6 +77,18 @@ test('unsupported /couponcoder arguments do not reset the current mode', async (
   assert.equal(fs.readFileSync(statePath, 'utf8'), 'ultra');
 });
 
+test('review commands preserve the live mode and stale review state falls back to the default', async () => {
+  const hooks = await loadPlugin({});
+  fs.writeFileSync(statePath, 'ultra');
+  await hooks['command.execute.before']({ command: 'couponcoder-review', arguments: '' });
+  await hooks['command.execute.before']({ command: 'couponcoder', arguments: 'review' });
+  assert.equal(fs.readFileSync(statePath, 'utf8'), 'ultra');
+
+  fs.writeFileSync(statePath, 'review');
+  const system = await transform(hooks);
+  assert.match(system[0], /COUPONCODER MODE ACTIVE — level: full/);
+});
+
 test('unrelated commands do not touch the flag', async () => {
   try { fs.unlinkSync(statePath); } catch (e) {}
   const hooks = await loadPlugin({});

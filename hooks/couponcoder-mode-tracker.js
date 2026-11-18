@@ -2,8 +2,9 @@
 // couponcoder — UserPromptSubmit hook to track which couponcoder mode is active
 // Inspects user input for /couponcoder commands and writes mode to flag file
 
-const { getDefaultMode, isDeactivationCommand, writeDefaultMode } = require('./couponcoder-config');
-const { clearMode, readMode, setMode, writeHookOutput } = require('./couponcoder-runtime');
+const { getDefaultMode, isDeactivationCommand, normalizeMode, writeDefaultMode } = require('./couponcoder-config');
+const { getCouponcoderInstructions } = require('./couponcoder-instructions');
+const { clearMode, isCodex, readMode, setMode, writeHookOutput } = require('./couponcoder-runtime');
 
 let input = '';
 let done = false;
@@ -27,9 +28,7 @@ function finish() {
       let mode = null;
       let isReportOnly = false;
 
-      if (cmd === '/couponcoder-review' || cmd === '/couponcoder:couponcoder-review') {
-        mode = 'review';
-      } else if (cmd === '/couponcoder' || cmd === '/couponcoder:couponcoder') {
+      if (cmd === '/couponcoder' || cmd === '/couponcoder:couponcoder') {
         // `/couponcoder default <mode>` persists the default to config (survives
         // restarts). Plain switches stay session-scoped ("sticks until session
         // end"), so this is the only path that writes config. review is not a
@@ -42,15 +41,11 @@ function finish() {
           }
           return; // don't fall through to the session-mode switch
         }
-        if (arg === 'lite') mode = 'lite';
-        else if (arg === 'full') mode = 'full';
-        else if (arg === 'ultra') mode = 'ultra';
-        else if (arg === 'off') mode = 'off';
-        else if (arg === '') {
+        if (arg === '') {
           isReportOnly = true;
           mode = readMode() || getDefaultMode();
         } else {
-          mode = getDefaultMode();
+          mode = normalizeMode(arg);
         }
       }
 
@@ -63,10 +58,11 @@ function finish() {
       } else if (mode && mode !== 'off') {
         setMode(mode);
         modeSwitched = true;
+        const notice = 'COUPONCODER MODE CHANGED — level: ' + mode;
         writeHookOutput(
           'UserPromptSubmit',
           mode,
-          'COUPONCODER MODE CHANGED — level: ' + mode,
+          isCodex ? notice + '\n\n' + getCouponcoderInstructions(mode) : notice,
         );
       } else if (mode === 'off') {
         clearMode();
