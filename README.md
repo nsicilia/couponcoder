@@ -88,6 +88,49 @@ The Claude Code and Codex plugins run two tiny Node.js lifecycle hooks, so `node
 
 Same steps in the Claude Code Desktop app's Code tab: type the two `/plugin` commands above into the prompt box, or click the **+** button next to it, choose **Plugins** → **Add plugin** to browse your configured marketplaces, and manage marketplaces from **Customize** in the sidebar.
 
+### VS Code
+
+**With the Claude Code extension** — full plugin, mode switches and all. Run the same two commands from the extension's prompt box, one at a time:
+
+```
+/plugin marketplace add nsicilia/couponcoder
+```
+```
+/plugin install couponcoder@couponcoder
+```
+
+**On older VS Code (1.90+), without the Claude Code extension** — build and sideload the bundled chat participant:
+
+```bash
+npm run package --prefix vscode-extension
+```
+```bash
+code --install-extension vscode-extension/couponcoder-4.8.4.vsix
+```
+
+Then talk to `@couponcoder` in the Chat view. `/lite`, `/full`, `/ultra` and `/off` switch levels, and the level sticks per workspace. It borrows a model from GitHub Copilot Chat, so that extension has to be installed and signed in. 1.90 is the floor because it is the first release with a stable chat participant API; older versions have no AI extension point at all — use the Copilot instructions file below.
+
+**With the Codex extension** — nothing to install. It reads [`AGENTS.md`](AGENTS.md), which this repo ships, so it works from the repo root as-is. Copy `AGENTS.md` into your own project to use it there, or put it at `~/.codex/AGENTS.md` to make it global. Always-on rules, no `/couponcoder` levels.
+
+**With GitHub Copilot Chat** — copy [`.github/copilot-instructions.md`](.github/copilot-instructions.md) into your project. Always-on rules, no `/couponcoder` levels.
+
+### JetBrains IDEs
+
+(IntelliJ, PyCharm, GoLand, WebStorm, and the rest.)
+
+**With the Claude Code plugin** — full plugin, mode switches and all. Run the same two commands from the plugin's prompt box, one at a time:
+
+```
+/plugin marketplace add nsicilia/couponcoder
+```
+```
+/plugin install couponcoder@couponcoder
+```
+
+**With Junie** — copy [`.junie/guidelines.md`](.junie/guidelines.md) into your project. Junie reads that path on its own, so there is nothing to configure. (Alternatively copy [`AGENTS.md`](AGENTS.md) and point Junie at it under **Settings → Tools → Junie → Project Settings → Guidelines Path** — same rules, one more step.) Always-on rules, no `/couponcoder` levels.
+
+**With GitHub Copilot Chat** — copy [`.github/copilot-instructions.md`](.github/copilot-instructions.md) into your project. Always-on rules, no `/couponcoder` levels.
+
 ### Codex
 
 ```bash
@@ -183,13 +226,9 @@ Set the level for every new session with the `COUPONCODER_DEFAULT_MODE` env var 
 
 While active, the ruleset is also injected into every subagent spawned via the Agent tool. To scope that to specific agent types (say, keep it off read-only search agents), set the `COUPONCODER_SUBAGENT_MATCHER` env var to a regex tested against the subagent's `agent_type`. It is unanchored and case-insensitive: `explore|general` matches either, `^general$` is exact, and plugin agent types look like `plugin:name`. Unset means inject into every subagent (the default); an invalid regex, or a subagent whose type the platform doesn't report, also falls back to injecting.
 
-Cursor, Windsurf, GitHub Copilot Chat (the VS Code, JetBrains, and Visual Studio editor extension, not the standalone Copilot CLI covered under [Install](#install)), Aider, CodeWhale: copy the matching rules file from this repo ([`.cursor/rules/`](.cursor/rules/), [`.windsurf/rules/`](.windsurf/rules/), [`.github/copilot-instructions.md`](.github/copilot-instructions.md), [`AGENTS.md`](AGENTS.md)).
+Editors and agents not covered above — Cursor, Windsurf, Visual Studio (Copilot Chat), Aider, CodeWhale: copy the matching rules file from this repo ([`.cursor/rules/`](.cursor/rules/), [`.windsurf/rules/`](.windsurf/rules/), [`.github/copilot-instructions.md`](.github/copilot-instructions.md), [`AGENTS.md`](AGENTS.md)). For VS Code and JetBrains, see [VS Code](#vs-code) and [JetBrains IDEs](#jetbrains-ides) above.
 
 GitHub Copilot CLI fallback (instruction-only mode): it reads `AGENTS.md` and `.github/copilot-instructions.md` in a project, or copy the rules into `~/.copilot/copilot-instructions.md` to run couponcoder in every project. This path keeps always-on guidance, but does not add plugin mode switches or hooks.
-
-VS Code with the Codex extension reads `AGENTS.md`, which this repo ships, so it works from the repo root with no setup (`~/.codex/AGENTS.md` makes Codex global).
-
-JetBrains Junie can read `AGENTS.md` once you point it there in Settings → Tools → Junie → Project Settings → Guidelines Path (it is not automatic yet). This repo ships `AGENTS.md`; `.junie/guidelines.md` is Junie's legacy path.
 
 Jules (Google) reads `AGENTS.md` from the repository root, which this repo ships, so it picks up the ruleset with no setup.
 
@@ -228,6 +267,8 @@ When changing the compact rule text, keep the agent copies aligned:
 node scripts/check-rule-copies.js
 npm test
 ```
+
+This is an internal fork and does not publish. The npm publish path is removed and `package.json` is marked private; `npm test` fails if either is reintroduced. Distribute through the internal registry instead.
 
 The correctness benchmark spawns Python for email and CSV checks; `python3` is tried before `python`. CSV checks need `pandas` installed locally.
 

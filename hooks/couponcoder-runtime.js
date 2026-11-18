@@ -1,14 +1,16 @@
 const fs = require('fs');
 const path = require('path');
-const { getClaudeDir } = require('./couponcoder-config');
+const { getClaudeDir, getDefaultMode, normalizeMode } = require('./couponcoder-config');
 
 const STATE_FILE = '.couponcoder-active';
-const isCopilot = Boolean(process.env.COPILOT_PLUGIN_DATA);
+// VS Code Copilot passes its plugin install path without COPILOT_PLUGIN_DATA.
+const isCopilot = Boolean(process.env.COPILOT_PLUGIN_DATA) ||
+  /(?:^|[\\/])\.vscode(?:-[\w-]+)?[\\/]agent-plugins(?:[\\/]|$)/i.test(process.env.CLAUDE_PLUGIN_ROOT || '');
 const isCodex = !isCopilot && Boolean(process.env.PLUGIN_DATA);
 
 let stateDir = getClaudeDir();
 if (isCodex) stateDir = process.env.PLUGIN_DATA;
-if (isCopilot) stateDir = process.env.COPILOT_PLUGIN_DATA;
+if (process.env.COPILOT_PLUGIN_DATA) stateDir = process.env.COPILOT_PLUGIN_DATA;
 
 const statePath = path.join(stateDir, STATE_FILE);
 
@@ -24,7 +26,8 @@ function clearMode() {
 // Live mode written by activate/mode-tracker. Absent flag = couponcoder off.
 function readMode() {
   try {
-    return fs.readFileSync(statePath, 'utf8').trim() || null;
+    const mode = fs.readFileSync(statePath, 'utf8').trim();
+    return mode === 'review' ? getDefaultMode() : normalizeMode(mode);
   } catch (e) {
     return null;
   }

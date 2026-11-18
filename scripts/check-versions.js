@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-// Version-consistency guard. Couponcoder declares its version in seven files across
-// five host ecosystems, and every release bumps all of them by hand.
+// Version-consistency guard. Couponcoder declares its version in eight files across
+// six host ecosystems, and every release bumps all of them by hand.
 //
 // tests/gemini-extension.test.js already checks the four plugin manifests agree
 // with each other, but that can't catch the failure mode that shipped in v4.8.0:
@@ -26,6 +26,7 @@ const VERSION_FILES = [
   'gemini-extension.json',       // Gemini CLI extension
   'package.json',                // pi-package / repo root
   'couponcoder-mcp/package.json',   // MCP server (private, internal-only)
+  'vscode-extension/package.json', // VS Code chat participant (VSIX, sideloaded)
 ];
 
 function readVersion(relPath) {

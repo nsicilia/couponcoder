@@ -1,0 +1,40 @@
+{
+  "name": "couponcoder",
+  "displayName": "Couponcoder",
+  "description": "Lazy senior dev mode for VS Code chat. The best code is the code you never wrote.",
+  "version": "4.8.4",
+  "private": true,
+  "license": "MIT",
+  "publisher": "nsicilia",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nsicilia/couponcoder.git"
+  },
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": ["Chat"],
+  "main": "./extension.js",
+  "activationEvents": ["onChatParticipant:couponcoder.chat"],
+  "contributes": {
+    "chatParticipants": [
+      {
+        "id": "couponcoder.chat",
+        "name": "couponcoder",
+        "fullName": "Couponcoder",
+        "description": "Ask for code, get the laziest version that works",
+        "isSticky": true,
+        "commands": [
+          { "name": "lite", "description": "Switch to lite: nudge, not enforcement" },
+          { "name": "full", "description": "Switch to full: the ladder enforced (default)" },
+          { "name": "ultra", "description": "Switch to ultra: for when the codebase has wronged you" },
+          { "name": "off", "description": "Turn couponcoder off for this workspace" }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "node -e \"const fs=require('fs');fs.cpSync('../hooks','bundled/hooks',{recursive:true});fs.cpSync('../skills/couponcoder','bundled/skills/couponcoder',{recursive:true});fs.copyFileSync('../LICENSE','LICENSE')\"",
+    "package": "npm run vscode:prepublish && npx @vscode/vsce package --no-dependencies"
+  }
+}

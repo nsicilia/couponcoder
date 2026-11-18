@@ -32,6 +32,7 @@ function run(script, env, input = '') {
 // COPILOT_PLUGIN_DATA leaked from the dev or CI shell would otherwise steer
 // writeHookOutput into the wrong branch and mis-fire the native assertions.
 delete process.env.CLAUDE_CONFIG_DIR;
+delete process.env.CLAUDE_PLUGIN_ROOT;
 delete process.env.PLUGIN_DATA;
 delete process.env.COPILOT_PLUGIN_DATA;
 // A leaked subagent matcher would scope the inject-into-every-subagent assertions.
@@ -75,6 +76,17 @@ assert.equal(result.status, 0, result.stderr);
 assert.equal(fs.readFileSync(codexState, 'utf8'), 'lite');
 output = JSON.parse(result.stdout);
 assert.equal(output.systemMessage, 'COUPONCODER:LITE');
+assert.match(output.hookSpecificOutput.additionalContext, /COUPONCODER MODE ACTIVE — level: lite/);
+assert.match(output.hookSpecificOutput.additionalContext, /## The ladder/);
+
+result = run('couponcoder-mode-tracker.js', codexEnv, JSON.stringify({ prompt: '$couponcoder:couponcoder-review' }));
+assert.equal(result.status, 0, result.stderr);
+assert.equal(fs.readFileSync(codexState, 'utf8'), 'lite', 'review must preserve the live level');
+
+result = run('couponcoder-activate.js', codexEnv, JSON.stringify({ source: 'compact' }));
+assert.equal(result.status, 0, result.stderr);
+assert.equal(JSON.parse(result.stdout).systemMessage, 'COUPONCODER:LITE');
+assert.equal(fs.readFileSync(codexState, 'utf8'), 'lite');
 
 // Querying bare @couponcoder should report the active level ('lite') without resetting it to default ('ultra')
 result = run(
@@ -101,6 +113,11 @@ assert.equal(result.status, 0, result.stderr);
 assert.equal(fs.existsSync(codexState), false);
 output = JSON.parse(result.stdout);
 assert.equal(output.systemMessage, 'COUPONCODER:OFF');
+
+result = run('couponcoder-activate.js', codexEnv, JSON.stringify({ source: 'compact' }));
+assert.equal(result.status, 0, result.stderr);
+assert.deepEqual(JSON.parse(result.stdout), { systemMessage: 'COUPONCODER:OFF' });
+assert.equal(fs.existsSync(codexState), false, 'compaction must keep Couponcoder off');
 
 // A request that merely mentions "normal mode" must not deactivate couponcoder.
 result = run('couponcoder-mode-tracker.js', codexEnv, JSON.stringify({ prompt: '@couponcoder lite' }));
@@ -216,6 +233,24 @@ assert.equal(
 );
 output = JSON.parse(result.stdout);
 assert.deepEqual(output, {});
+
+const vscodeHome = path.join(temp, 'vscode-copilot-home');
+for (const pluginRoot of [
+  path.join(vscodeHome, '.vscode', 'agent-plugins', 'couponcoder'),
+  'C:\\Users\\test\\.vscode-insiders\\agent-plugins\\couponcoder',
+]) {
+  result = run('couponcoder-activate.js', {
+    HOME: vscodeHome,
+    USERPROFILE: vscodeHome,
+    CLAUDE_PLUGIN_ROOT: pluginRoot,
+    COUPONCODER_DEFAULT_MODE: 'full',
+  });
+  assert.equal(result.status, 0, result.stderr);
+  output = JSON.parse(result.stdout);
+  assert.match(output.additionalContext, /COUPONCODER MODE ACTIVE — level: full/);
+  assert.doesNotMatch(output.additionalContext, /STATUSLINE SETUP NEEDED/);
+  assert.equal(fs.readFileSync(path.join(vscodeHome, '.claude', '.couponcoder-active'), 'utf8'), 'full');
+}
 
 // SubagentStart hook: when couponcoder mode is active it injects the ruleset into
 // each subagent (issue #252). Native Claude must get the hookSpecificOutput JSON

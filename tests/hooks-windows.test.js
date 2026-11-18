@@ -8,6 +8,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
 const { spawn } = require('child_process');
 
@@ -85,26 +86,37 @@ test('every hook command points at a script that ships in hooks/', () => {
   }
 });
 
-// Issue #443: on Windows the UserPromptSubmit hook runs inside a PowerShell
+// Issue #443: on Windows a hook may run inside a PowerShell
 // `if {}` wrapper that can swallow the piped prompt JSON, so stdin 'end' never
 // fires. The hook must never wait on stdin forever — that freezes the whole
 // session. It has to self-exit even when stdin stays open and empty.
-test('couponcoder-mode-tracker self-exits when stdin never closes (no freeze)', async () => {
-  const hook = path.join(root, 'hooks', 'couponcoder-mode-tracker.js');
-  // stdin is a pipe we never write to or end, reproducing the deadlock.
-  const child = spawn(process.execPath, [hook], { stdio: ['pipe', 'ignore', 'ignore'] });
+for (const script of ['couponcoder-activate.js', 'couponcoder-mode-tracker.js']) {
+  test(`${script} self-exits when stdin never closes`, async (t) => {
+    const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'couponcoder-stdin-'));
+    t.after(() => fs.rmSync(temp, { recursive: true, force: true }));
+    const hook = path.join(root, 'hooks', script);
+    const child = spawn(process.execPath, [hook], {
+      env: { ...process.env, COPILOT_PLUGIN_DATA: temp, COUPONCODER_DEFAULT_MODE: 'full' },
+      stdio: ['pipe', 'pipe', 'ignore'],
+    });
+    let output = '';
+    child.stdout.setEncoding('utf8').on('data', chunk => { output += chunk; });
 
-  const code = await new Promise((resolve, reject) => {
-    const guard = setTimeout(() => {
-      child.kill('SIGKILL');
-      reject(new Error('hook hung on open stdin — it would freeze the session'));
-    }, 3000);
-    child.on('exit', (c) => { clearTimeout(guard); resolve(c); });
-    child.on('error', reject);
+    const code = await new Promise((resolve, reject) => {
+      const guard = setTimeout(() => {
+        child.kill('SIGKILL');
+        reject(new Error('hook hung on open stdin — it would freeze the session'));
+      }, 3000);
+      child.on('close', (c) => { clearTimeout(guard); resolve(c); });
+      child.on('error', reject);
+    });
+
+    assert.equal(code, 0, 'hook must exit cleanly when stdin never closes');
+    if (script === 'couponcoder-activate.js') {
+      assert.match(JSON.parse(output).additionalContext, /COUPONCODER MODE ACTIVE — level: full/);
+    }
   });
-
-  assert.equal(code, 0, 'hook must exit cleanly when stdin never closes');
-});
+}
 
 test('Claude and Codex manifests point at the shared host-specific hook config', () => {
   for (const rel of HOST_PLUGIN_MANIFESTS) {

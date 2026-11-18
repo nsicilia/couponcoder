@@ -20,7 +20,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // The shared instruction builder is CommonJS; bridge to it from this ES module.
 const require = createRequire(import.meta.url);
 const { getCouponcoderInstructions } = require('../../hooks/couponcoder-instructions');
-const { getDefaultMode, normalizePersistedMode } = require('../../hooks/couponcoder-config');
+const { getDefaultMode, normalizeMode } = require('../../hooks/couponcoder-config');
 const { parseCommandFile } = require('./couponcoder-frontmatter.cjs');
 
 // OpenCode has no flag-file convention of its own; keep mode beside its config.
@@ -32,7 +32,7 @@ const statePath = path.join(
 
 function readMode() {
   try {
-    return normalizePersistedMode(fs.readFileSync(statePath, 'utf8').trim()) || getDefaultMode();
+    return normalizeMode(fs.readFileSync(statePath, 'utf8')) || getDefaultMode();
   } catch (e) {
     return getDefaultMode();
   }
@@ -90,7 +90,7 @@ export default async ({ client } = {}) => {
       if (!input || input.command !== 'couponcoder') return;
       // `off` is persisted like any mode; the transform reads it and stays silent.
       const args = String(input.arguments || '').trim();
-      const mode = args ? normalizePersistedMode(args) : getDefaultMode();
+      const mode = args ? normalizeMode(args) : getDefaultMode();
       if (!mode) return;
       writeMode(mode);
       log('info', 'couponcoder ' + mode);

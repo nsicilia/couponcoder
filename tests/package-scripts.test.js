@@ -43,10 +43,13 @@ test('MCP lockfile is committed and matches package.json', () => {
 });
 
 test('CI actions are pinned to commit SHAs, not mutable tags', () => {
-  for (const wf of ['test.yml', 'publish.yml']) {
-    const workflow = fs.readFileSync(path.join(root, '.github', 'workflows', wf), 'utf8');
+  const dir = path.join(root, '.github', 'workflows');
+  const workflows = fs.readdirSync(dir).filter((f) => f.endsWith('.yml'));
+  assert.ok(workflows.length > 0, 'expected at least one workflow');
+
+  for (const wf of workflows) {
+    const workflow = fs.readFileSync(path.join(dir, wf), 'utf8');
     const uses = workflow.match(/uses:\s*\S+/g) || [];
-    assert.ok(uses.length > 0, `${wf}: expected at least one action`);
 
     for (const u of uses) {
       assert.match(
@@ -55,5 +58,27 @@ test('CI actions are pinned to commit SHAs, not mutable tags', () => {
         `${wf}: ${u} is pinned to a mutable tag — pin to a 40-char commit SHA`,
       );
     }
+  }
+});
+
+// This fork is internal-only. Publishing to a public registry is the one thing it
+// must never do, so assert the absence of every path that could — a deleted file
+// silently returns the moment someone merges upstream without reading the diff.
+test('internal fork cannot publish to a public registry', () => {
+  const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
+
+  assert.equal(pkg.private, true, 'package.json must set "private": true so npm refuses to publish');
+  assert.equal(pkg.publishConfig, undefined, 'publishConfig implies a registry target — drop it');
+
+  assert.ok(
+    !fs.existsSync(path.join(root, '.github', 'workflows', 'publish.yml')),
+    'publish.yml publishes to public npm and must not exist on the internal fork',
+  );
+
+  const workflowDir = path.join(root, '.github', 'workflows');
+  for (const wf of fs.readdirSync(workflowDir)) {
+    const body = fs.readFileSync(path.join(workflowDir, wf), 'utf8');
+    assert.ok(!/npm publish/i.test(body), `${wf} contains a publish step`);
+    assert.ok(!/id-token:\s*write/.test(body), `${wf} grants id-token: write — only publishing needs it`);
   }
 });
